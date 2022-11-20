@@ -1,10 +1,15 @@
 from flask import Flask, Response, request
 from datetime import datetime
 import json
+from gevent import monkey
 from ApiResources.CustomerContactCompose import CustomerContactCompose
 from flask_cors import CORS
 
 # Create the Flask application object.
+
+# needed to fix a grequests issue - https://github.com/miguelgrinberg/Flask-SocketIO/issues/65#issuecomment-60697013
+monkey.patch_all()
+
 app = Flask(__name__)
 CORS(app)
 

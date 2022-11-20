@@ -1,5 +1,8 @@
 import pymysql
+import json
+from flask import jsonify
 from flask import Response
+import grequests
 import requests
 
 import os
@@ -7,20 +10,28 @@ import os
 CUSTOMERS_URI = "http://ec2-54-164-164-254.compute-1.amazonaws.com/api/customers/"
 CONTACTS_URI = "http://44.202.82.103:5015/contactInfo/"
 
+
 class CustomerContactCompose:
 
     def __int__(self):
         pass
 
+    # TODO: add pagination here and align it with the other endpoints..
     @staticmethod
     def get_info(cid=None):
 
         result = None
 
         if cid is None:
-            customers_response = requests.get(CUSTOMERS_URI).json()["content"]
-            contacts_response  = requests.get(CONTACTS_URI).json()["items"]
-            #result = dict(customers_response["content"].items() | contacts_response.items())
+            reqs = [
+                grequests.get(CUSTOMERS_URI),
+                grequests.get(CONTACTS_URI),
+            ]
+
+            async_results = grequests.map(reqs)
+
+            customers_response = json.loads(async_results[0].content)["content"]
+            contacts_response = json.loads(async_results[1].content)["items"]
 
             merged = []
             for customer in customers_response:
@@ -30,8 +41,16 @@ class CustomerContactCompose:
             result = merged
 
         else:
-            customers_response = requests.get(CUSTOMERS_URI + cid).json()
-            contacts_response  = requests.get(CONTACTS_URI  + cid).json()
+            reqs = [
+                grequests.get(CUSTOMERS_URI + cid),
+                grequests.get(CONTACTS_URI + cid),
+            ]
+
+            async_results = grequests.map(reqs)
+
+            customers_response = json.loads(async_results[0].content)
+            contacts_response = json.loads(async_results[1].content)
+
             result = dict(customers_response.items() | contacts_response.items())
 
         return result

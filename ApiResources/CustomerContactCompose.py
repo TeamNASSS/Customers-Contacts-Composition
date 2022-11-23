@@ -28,10 +28,10 @@ class CustomerContactCompose:
                 grequests.get(CONTACTS_URI),
             ]
 
-            async_results = grequests.map(reqs)
+            customers_req_response, contacts_req_response = get_gre_responses(reqs)
 
-            customers_response = json.loads(async_results[0].content)["content"]
-            contacts_response = json.loads(async_results[1].content)["items"]
+            customers_response = json.loads(customers_req_response.content)["content"]
+            contacts_response = json.loads(contacts_req_response.content)["items"]
 
             merged = []
             for customer in customers_response:
@@ -46,11 +46,30 @@ class CustomerContactCompose:
                 grequests.get(CONTACTS_URI + cid),
             ]
 
-            async_results = grequests.map(reqs)
+            customers_req_response, contacts_req_response = get_gre_responses(reqs)
 
-            customers_response = json.loads(async_results[0].content)
-            contacts_response = json.loads(async_results[1].content)
+            # Customers MS returns 500 if user doesn't exist, so I only check contacts
+            if contacts_req_response.status_code == 404:
+                return None
+
+            customers_response = json.loads(customers_req_response.content)
+            contacts_response = json.loads(contacts_req_response.content)
 
             result = dict(customers_response.items() | contacts_response.items())
 
         return result
+
+
+def get_gre_responses(reqs):
+    async_results = grequests.map(reqs)
+
+    contacts_req_response = None
+    customers_req_response = None
+
+    for response in async_results:
+        if "customers" in response.request.url:
+            customers_req_response = response
+        else:
+            contacts_req_response = response
+
+    return customers_req_response, contacts_req_response

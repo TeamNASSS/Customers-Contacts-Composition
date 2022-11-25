@@ -4,7 +4,7 @@ import json
 from gevent import monkey
 from ApiResources.CustomerContactCompose import CustomerContactCompose
 from flask_cors import CORS
-from Utils import Validations
+from Utils.Validations import is_valid_address
 
 # Create the Flask application object.
 
@@ -55,6 +55,7 @@ def add_user():
     """
     # Todo: extract User-Id (cid) from header.
     cid = request.headers['cid']
+    data = request.get_json()
 
     # Todo: check if user is already initialized. if yes return 400 bad request
     current_user = CustomerContactCompose.get_info(cid)
@@ -64,7 +65,7 @@ def add_user():
                         status=400, content_type="application/json")
 
     # TODO: complete Validations.is_valid_address
-    if not Validations.is_valid_address():
+    if not Validations.is_valid_address(data):
         return Response(json.dumps("Invalid address was provided", default=str),
                         status=400, content_type="application/json")
 

@@ -7,8 +7,8 @@ import requests
 
 import os
 
-CUSTOMERS_URI = "http://ec2-54-164-164-254.compute-1.amazonaws.com/api/customers/"
-CONTACTS_URI = "http://44.202.82.103:5015/contactInfo/"
+CUSTOMERS_URI = "http://ec2-54-164-164-254.compute-1.amazonaws.com/api/customers"
+CONTACTS_URI = "http://44.202.82.103:5015/contactInfo"
 
 
 class CustomerContactCompose:
@@ -73,7 +73,7 @@ class CustomerContactCompose:
         customers_req_response, contacts_req_response = gre_responses(reqs)
 
         customers_response = json.loads(customers_req_response.content)
-        contacts_response = json.loads(contacts_req_response.content)
+        contacts_response = {"Contact_Response" : json.loads(contacts_req_response.content)}
         result = dict(customers_response.items() | contacts_response.items())
 
         return result

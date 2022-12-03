@@ -10,7 +10,8 @@ def is_valid_address(data):
     lookup = StreetLookup()
 
     lookup.street = data['address_line1']
-    lookup.secondary = data['address_line2']
+    # apartment number fails as it may not be in smarty's database
+    #lookup.secondary = data['address_line2']
     lookup.city = data['address_city']
     lookup.state = data['address_state']
     lookup.zipcode = data['address_zipcode']

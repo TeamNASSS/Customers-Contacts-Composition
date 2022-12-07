@@ -4,7 +4,7 @@ import json
 from gevent import monkey
 from ApiResources.CustomerContactCompose import CustomerContactCompose
 from flask_cors import CORS
-from Utils import Validations
+from Utils.Validations import is_valid_address
 
 # Create the Flask application object.
 
@@ -27,7 +27,7 @@ def get_health():
     return result
 
 
-@app.route("/api/customercontactcompose/", methods=["GET"])
+@app.route("/api/customercontactcompose", methods=["GET"])
 def get_info():
 
     result = CustomerContactCompose.get_info()
@@ -46,29 +46,28 @@ def get_info_by_id(id):
     return rsp
 
 
-@app.route("/api/customercontactcompose/", methods=["POST"])
+@app.route("/api/customercontactcompose", methods=["POST"])
 def add_user():
     """
         This Method is called only once per user, when a new user is joining this EP will initialize their
         Contact, user info.
     :return: TBD
     """
-    # Todo: extract User-Id (cid) from header.
-    cid = request.headers['cid']
+    data = request.get_json()
 
     # Todo: check if user is already initialized. if yes return 400 bad request
-    current_user = CustomerContactCompose.get_info(cid)
+    current_user = CustomerContactCompose.get_info(data['cid'])
+
+    if not is_valid_address(data):
+        return Response(json.dumps("Invalid address was provided", default=str),
+                        status=400, content_type="application/json")
 
     if current_user is not None:
         return Response(json.dumps("User Already Exists", default=str),
                         status=400, content_type="application/json")
+    else:
+        CustomerContactCompose.add_info(data)
 
-    # TODO: complete Validations.is_valid_address
-    if not Validations.is_valid_address():
-        return Response(json.dumps("Invalid address was provided", default=str),
-                        status=400, content_type="application/json")
-
-    # TODO: add logic to async Post to both contacts and customers services.
 
     return Response(json.dumps("Successfully Created User Info", default=str),
                     status=200, content_type="application/json")

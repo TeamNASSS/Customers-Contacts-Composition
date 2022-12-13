@@ -62,7 +62,13 @@ class CustomerContactCompose:
     def add_info(data):
         dictfilt = lambda x, y: dict([ (i,x[i]) for i in x if i in set(y) ])
         contact_post = dictfilt(data, ("cid", "email", "phone", "address_line1", "address_line2", "address_state", "address_city", "address_zipcode"))
-        customer_post = dictfilt(data, ("cid", "firstName", "middle_name", "last_name", "doj"))
+        customer_post = {
+           "cid": data["cid"],
+           "firstName":  data["firstName"],
+           "middleName":  data["middle_name"],
+           "lastName":  data["last_name"],
+           "doj":  data["doj"]
+        }
         headers = {'Content-Type': 'application/json'}
 
         reqs = [

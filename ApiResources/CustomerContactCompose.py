@@ -36,7 +36,7 @@ class CustomerContactCompose:
             merged = []
             for customer in customers_response:
                 for contact in contacts_response:
-                    if customer["cid"] == contact["cid"]:
+                    if customer["cid"] == int(contact["cid"]):
                         merged.append(dict(customer.items() | contact.items()))
             result = merged
 

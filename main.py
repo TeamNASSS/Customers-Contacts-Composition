@@ -40,7 +40,12 @@ def get_info_by_id(id):
     rsp = CustomerContactCompose.get_info(id)
 
     if rsp is None or len(rsp) == 0:
-        rsp = Response("Info not found!", status=404, content_type="text/plain")
+        rsp = Response(json.dumps(
+            {
+                "status code": 404,
+                "error": "user doesn't exists"
+            }
+        ), status=404, content_type="application/json")
     else:
         rsp = Response(json.dumps(rsp, default=str), status=200, content_type="application/json")
     return rsp
@@ -59,18 +64,30 @@ def add_user():
     current_user = CustomerContactCompose.get_info(data['cid'])
 
     if not is_valid_address(data):
-        return Response(json.dumps("Invalid address was provided", default=str),
-                        status=400, content_type="application/json")
+        return Response(json.dumps(
+            {
+                "status code": 400,
+                "error": "Invalid address was provided"
+            }, default=str), status=400, content_type="application/json")
 
     if current_user is not None:
-        return Response(json.dumps("User Already Exists", default=str),
-                        status=400, content_type="application/json")
+        return Response(json.dumps({
+                "status code": 400,
+                "error": "User Already Exists"
+            }, default=str), status=400, content_type="application/json")
+
+    if "authCID" not in request.headers or request.headers["authCID"] != data["cid"]:
+        return Response(json.dumps({
+            "status code": 401,
+            "error": "User Unauthorized to do action"
+        }, default=str), status=401, content_type="application/json")
     else:
         CustomerContactCompose.add_info(data)
 
-
-    return Response(json.dumps("Successfully Created User Info", default=str),
-                    status=200, content_type="application/json")
+    return Response(json.dumps({
+                "status code": 200,
+                "Message": "Successfully Created User Info"
+            }, default=str), status=200, content_type="application/json")
 
 
 if __name__ == "__main__":

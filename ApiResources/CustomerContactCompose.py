@@ -63,7 +63,12 @@ class CustomerContactCompose:
         dictfilt = lambda x, y: dict([ (i,x[i]) for i in x if i in set(y) ])
         contact_post = dictfilt(data, ("cid", "email", "phone", "address_line1", "address_line2", "address_state", "address_city", "address_zipcode"))
         customer_post = dictfilt(data, ("cid", "firstName", "middle_name", "last_name", "doj"))
-        headers = {'Content-Type': 'application/json'}
+        headers = {
+            'Content-Type': 'application/json',
+             'authCID': contact_post['cid']
+        }
+
+        # customer_post["cid"] = int(customer_post["cid"])
 
         reqs = [
             grequests.post(CUSTOMERS_URI, data=json.dumps(customer_post), headers=headers),

@@ -36,7 +36,7 @@ class CustomerContactCompose:
             merged = []
             for customer in customers_response:
                 for contact in contacts_response:
-                    if customer["cid"] == int(contact["cid"]):
+                    if str(customer["cid"]) == str(contact["cid"]):
                         merged.append(dict(customer.items() | contact.items()))
             result = merged
 
@@ -74,6 +74,31 @@ class CustomerContactCompose:
         reqs = [
             grequests.post(CUSTOMERS_URI, data=json.dumps(customer_post), headers=headers),
             grequests.post(CONTACTS_URI, data=json.dumps(contact_post), headers=headers)
+        ]
+
+        customers_req_response, contacts_req_response = gre_responses(reqs)
+
+        customers_response = json.loads(customers_req_response.content)
+        contacts_response = {"Contact_Response" : json.loads(contacts_req_response.content)}
+        result = dict(customers_response.items() | contacts_response.items())
+
+        return result
+
+    def update_info(data):
+        dictfilt = lambda x, y: dict([ (i,x[i]) for i in x if i in set(y) ])
+        contact_put = dictfilt(data, ("cid", "email", "phone", "address_line1", "address_line2", "address_state", "address_city", "address_zipcode"))
+        customer_put = {
+           "cid": data["cid"],
+           "firstName":  data["firstName"],
+           "middleName":  data["middle_name"],
+           "lastName":  data["last_name"],
+           "doj":  data["doj"]
+        }
+        headers = {'Content-Type': 'application/json'}
+
+        reqs = [
+            grequests.put(CUSTOMERS_URI, data=json.dumps(customer_put), headers=headers),
+            grequests.put(CONTACTS_URI, data=json.dumps(contact_put), headers=headers)
         ]
 
         customers_req_response, contacts_req_response = gre_responses(reqs)

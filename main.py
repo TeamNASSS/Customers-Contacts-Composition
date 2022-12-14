@@ -63,8 +63,7 @@ def add_user():
                         status=400, content_type="application/json")
 
     if current_user is not None:
-        return Response(json.dumps("User Already Exists", default=str),
-                        status=400, content_type="application/json")
+        CustomerContactCompose.update_info(data)
     else:
         CustomerContactCompose.add_info(data)
 

@@ -69,7 +69,7 @@ class CustomerContactCompose:
            "lastName":  data["last_name"],
            "doj":  data["doj"]
         }
-        headers = {'Content-Type': 'application/json'}
+        headers = {'Content-Type': 'application/json', 'authCID': contact_post['cid']}
 
         reqs = [
             grequests.post(CUSTOMERS_URI, data=json.dumps(customer_post), headers=headers),
@@ -94,7 +94,7 @@ class CustomerContactCompose:
            "lastName":  data["last_name"],
            "doj":  data["doj"]
         }
-        headers = {'Content-Type': 'application/json'}
+        headers = {'Content-Type': 'application/json', 'authCID': contact_put['cid']}
 
         reqs = [
             grequests.put(CUSTOMERS_URI, data=json.dumps(customer_put), headers=headers),

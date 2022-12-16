@@ -27,7 +27,7 @@ def get_health():
     return result
 
 
-@app.route("/api/customercontactcompose", methods=["GET"])
+@app.route("/api/customercontactcompose/", methods=["GET"])
 def get_info():
 
     result = CustomerContactCompose.get_info()
@@ -45,7 +45,7 @@ def get_info_by_id(id):
         rsp = Response(json.dumps(rsp, default=str), status=200, content_type="application/json")
     return rsp
 
-@app.route("/api/customercontactcompose", methods=["POST"])
+@app.route("/api/customercontactcompose/", methods=["POST"])
 def add_user():
     """
         This Method is called only once per user, when a new user is joining this EP will initialize their
@@ -69,7 +69,7 @@ def add_user():
 
     return result
 
-@app.route("/api/customercontactcompose", methods=["PUT"])
+@app.route("/api/customercontactcompose/", methods=["PUT"])
 def update_user():
     """
         PUT for customercontactcompose

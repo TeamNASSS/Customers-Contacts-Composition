@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /aws
-    destination: /home/ec2-user/Customers-Contacts-Composition
+    destination: /home/ec2-user/app
 hooks:
   AfterInstall:
    - location: scripts/install-dependencies

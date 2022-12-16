@@ -37,7 +37,18 @@ class CustomerContactCompose:
             for customer in customers_response:
                 for contact in contacts_response:
                     if str(customer["cid"]) == str(contact["cid"]):
-                        merged.append(dict(customer.items() | contact.items()))
+                        element = dict(customer.items() | contact.items())
+                        element["links"] = [
+                            {
+                            "href": "/beta/itemsservice/items/cid/{}".format(customer["cid"]),
+                            "rel": "items"
+                            },
+                            {
+                            "href": "/beta/composeservice/api/customercontactcompose/{}".format(customer["cid"]),
+                            "rel": "self"
+                            }
+                        ]
+                        merged.append(element)
             result = merged
 
         else:
@@ -56,6 +67,17 @@ class CustomerContactCompose:
             contacts_response = json.loads(contacts_req_response.content)
 
             result = dict(customers_response.items() | contacts_response.items())
+
+            result["links"] = [
+                {
+                   "href": "/beta/itemsservice/items/{}".format(customers_response["cid"]),
+                   "rel": "items"
+                },
+                {
+                   "href": "/beta/composeservice/api/customercontactcompose/{}".format(customers_response["cid"]),
+                   "rel": "self"
+                }
+            ]
 
         return result
 

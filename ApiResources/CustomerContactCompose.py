@@ -68,16 +68,17 @@ class CustomerContactCompose:
 
             result = dict(customers_response.items() | contacts_response.items())
 
-            result["links"] = [
-                {
-                   "href": "/beta/itemsservice/items/{}".format(customers_response["cid"]),
-                   "rel": "items"
-                },
-                {
-                   "href": "/beta/composeservice/api/customercontactcompose/{}".format(customers_response["cid"]),
-                   "rel": "self"
-                }
-            ]
+            if "cid" in customers_response.keys():
+                result["links"] = [
+                    {
+                       "href": "/beta/itemsservice/items/{}".format(customers_response["cid"]),
+                       "rel": "items"
+                    },
+                    {
+                       "href": "/beta/composeservice/api/customercontactcompose/{}".format(customers_response["cid"]),
+                       "rel": "self"
+                    }
+                ]
 
         return result
 

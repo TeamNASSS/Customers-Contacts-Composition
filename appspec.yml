@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /aws
+    destination: /home/ec2-user/Customers-Contacts-Composition
+hooks:
+  AfterInstall:
+   - location: scripts/install-dependencies
+     timeout: 300
+     runas: ec2-user
+  ApplicationStart:
+   - location: scripts/application-start
+     timeout: 300
+     runas: ec2-user
+  ApplicationStop:
+  - location: scripts/application-stop
+     timeout: 300
+     runas: ec2-user

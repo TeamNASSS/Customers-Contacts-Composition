@@ -40,7 +40,7 @@ class CustomerContactCompose:
                         element = dict(customer.items() | contact.items())
                         element["links"] = [
                             {
-                            "href": "/beta/itemsservice/items/{}".format(customer["cid"]),
+                            "href": "/beta/itemsservice/items/cid/{}".format(customer["cid"]),
                             "rel": "items"
                             },
                             {

@@ -45,7 +45,6 @@ def get_info_by_id(id):
         rsp = Response(json.dumps(rsp, default=str), status=200, content_type="application/json")
     return rsp
 
-
 @app.route("/api/customercontactcompose", methods=["POST"])
 def add_user():
     """
@@ -59,16 +58,27 @@ def add_user():
 
     # Todo: check if user is already initialized. if yes return 400 bad request
     current_user = CustomerContactCompose.get_info(data['cid'])
+    if current_user is not None:
+        return Response("User already exists!", status=400, content_type="text/plain")
 
     if not is_valid_address(data):
         return Response(json.dumps("Invalid address was provided", default=str),
                         status=400, content_type="application/json")
 
-    result = None
-    if current_user is not None:
-        result = CustomerContactCompose.update_info(data)
-    else:
-        result = CustomerContactCompose.add_info(data)
+    result = CustomerContactCompose.add_info(data)
+
+    return result
+
+@app.route("/api/customercontactcompose", methods=["PUT"])
+def update_user():
+    """
+        PUT for customercontactcompose
+    """
+    data = request.get_json()
+    data["cid"] = request.headers['authCID']
+    data["email"] = request.headers['email']
+
+    result = CustomerContactCompose.update_info(data)
 
     return result
 

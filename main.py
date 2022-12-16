@@ -62,14 +62,13 @@ def add_user():
         return Response(json.dumps("Invalid address was provided", default=str),
                         status=400, content_type="application/json")
 
+    result = None
     if current_user is not None:
-        CustomerContactCompose.update_info(data)
+        result = CustomerContactCompose.update_info(data)
     else:
-        CustomerContactCompose.add_info(data)
+        result = CustomerContactCompose.add_info(data)
 
-
-    return Response(json.dumps("Successfully Created User Info", default=str),
-                    status=200, content_type="application/json")
+    return result
 
 
 if __name__ == "__main__":

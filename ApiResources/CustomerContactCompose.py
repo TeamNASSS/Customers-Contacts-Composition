@@ -19,10 +19,12 @@ class CustomerContactCompose:
     # TODO: add pagination here and align it with the other endpoints..
     @staticmethod
     def get_info(cid=None):
+        print("Inside get_info")
 
         result = None
 
         if cid is None:
+            print("cid is None")
             reqs = [
                 grequests.get(CUSTOMERS_URI),
                 grequests.get(CONTACTS_URI),
@@ -49,9 +51,11 @@ class CustomerContactCompose:
                             }
                         ]
                         merged.append(element)
+            print("result ", result)
             result = merged
 
         else:
+            print("result ", result)
             reqs = [
                 grequests.get(CUSTOMERS_URI + '/' + cid),
                 grequests.get(CONTACTS_URI + '/' + cid),
@@ -62,6 +66,8 @@ class CustomerContactCompose:
             # Customers MS returns 500 if user doesn't exist, so I only check contacts
             if contacts_req_response.status_code == 404:
                 return None
+
+            print("!!!! contacts_req_response !!!", contacts_req_response)
 
             customers_response = json.loads(customers_req_response.content)
             contacts_response = json.loads(contacts_req_response.content)

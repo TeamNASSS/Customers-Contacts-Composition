@@ -78,7 +78,7 @@ class CustomerContactCompose:
             if "cid" in customers_response.keys():
                 result["links"] = [
                     {
-                       "href": "/beta/itemsservice/items/{}".format(customers_response["cid"]),
+                       "href": "/beta/itemsservice/items/cid/{}".format(customers_response["cid"]),
                        "rel": "items"
                     },
                     {

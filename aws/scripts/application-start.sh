@@ -1,3 +1,2 @@
-cd /home/ec2-user/app
-source environment/bin/activate
+cd /home/ec2-user/Customers-Contacts-Composition
 python3 main.py

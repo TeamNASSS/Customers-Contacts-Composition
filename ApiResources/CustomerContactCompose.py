@@ -51,11 +51,11 @@ class CustomerContactCompose:
                             }
                         ]
                         merged.append(element)
-            print("result ", result)
+            print("result 54 : ", result)
             result = merged
 
         else:
-            print("result ", result)
+            print("result 58 : ", result)
             reqs = [
                 grequests.get(CUSTOMERS_URI + '/' + cid),
                 grequests.get(CONTACTS_URI + '/' + cid),
@@ -67,6 +67,7 @@ class CustomerContactCompose:
             if contacts_req_response.status_code == 404:
                 return None
 
+            print("!!!! customers_req_response !!!", customers_req_response)
             print("!!!! contacts_req_response !!!", contacts_req_response)
 
             customers_response = json.loads(customers_req_response.content)
@@ -85,6 +86,7 @@ class CustomerContactCompose:
                        "rel": "self"
                     }
                 ]
+        print("!!!! result 89 !!!", result)
 
         return result
 
@@ -94,13 +96,14 @@ class CustomerContactCompose:
         customer_post = dictfilt(data, ("cid", "firstName", "middleName", "lastName", "doj"))
 
         headers = {'Content-Type': 'application/json', 'authCID': contact_post['cid']}
-
+        print(customer_post, "cusotmer post data!")
         reqs = [
             grequests.post(CUSTOMERS_URI, data=json.dumps(customer_post), headers=headers),
             grequests.post(CONTACTS_URI, data=json.dumps(contact_post), headers=headers)
         ]
 
         customers_req_response, contacts_req_response = gre_responses(reqs)
+        print(customers_req_response, "cusotmer post response!")
 
         customers_response = {"customers_status_code" : customers_req_response.status_code}
         contacts_response = {"contacts_status_code" : contacts_req_response.status_code}

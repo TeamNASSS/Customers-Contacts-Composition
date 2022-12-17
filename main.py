@@ -5,6 +5,7 @@ from gevent import monkey
 from ApiResources.CustomerContactCompose import CustomerContactCompose
 from flask_cors import CORS
 from Utils.Validations import is_valid_address
+from datetime import date
 
 # Create the Flask application object.
 
@@ -55,18 +56,23 @@ def add_user():
     data = request.get_json()
     data["cid"] = request.headers['authCID']
     data["email"] = request.headers['email']
+    data["doj"] = str(date.today())
+    print(data["cid"], data["email"], "?Headers!!")
 
     # Todo: check if user is already initialized. if yes return 400 bad request
     current_user = CustomerContactCompose.get_info(data['cid'])
     if current_user is not None:
+        print("current_user is not None")
         return Response("User already exists!", status=400, content_type="text/plain")
+
+    print("current_user is ", current_user)
 
     if not is_valid_address(data):
         return Response(json.dumps("Invalid address was provided", default=str),
                         status=400, content_type="application/json")
 
     result = CustomerContactCompose.add_info(data)
-
+    print("Added Customer!!")
     return result
 
 @app.route("/api/customercontactcompose/", methods=["PUT"])

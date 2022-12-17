@@ -5,6 +5,7 @@ from gevent import monkey
 from ApiResources.CustomerContactCompose import CustomerContactCompose
 from flask_cors import CORS
 from Utils.Validations import is_valid_address
+from datetime import date
 
 # Create the Flask application object.
 
@@ -55,6 +56,7 @@ def add_user():
     data = request.get_json()
     data["cid"] = request.headers['authCID']
     data["email"] = request.headers['email']
+    data["doj"] = str(date.today())
     print(data["cid"], data["email"], "?Headers!!")
 
     # Todo: check if user is already initialized. if yes return 400 bad request

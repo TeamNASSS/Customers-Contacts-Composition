@@ -55,6 +55,7 @@ def add_user():
     data = request.get_json()
     data["cid"] = request.headers['authCID']
     data["email"] = request.headers['email']
+    print(data["cid"], data["email"], "?Headers!!")
 
     # Todo: check if user is already initialized. if yes return 400 bad request
     current_user = CustomerContactCompose.get_info(data['cid'])
@@ -69,7 +70,7 @@ def add_user():
                         status=400, content_type="application/json")
 
     result = CustomerContactCompose.add_info(data)
-
+    print("Added Customer!!")
     return result
 
 @app.route("/api/customercontactcompose/", methods=["PUT"])

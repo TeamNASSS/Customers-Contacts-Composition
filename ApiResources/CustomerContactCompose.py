@@ -96,13 +96,14 @@ class CustomerContactCompose:
         customer_post = dictfilt(data, ("cid", "firstName", "middleName", "lastName", "doj"))
 
         headers = {'Content-Type': 'application/json', 'authCID': contact_post['cid']}
-
+        print(customer_post, "cusotmer post data!")
         reqs = [
             grequests.post(CUSTOMERS_URI, data=json.dumps(customer_post), headers=headers),
             grequests.post(CONTACTS_URI, data=json.dumps(contact_post), headers=headers)
         ]
 
         customers_req_response, contacts_req_response = gre_responses(reqs)
+        print(customers_req_response, "cusotmer post response!")
 
         customers_response = {"customers_status_code" : customers_req_response.status_code}
         contacts_response = {"contacts_status_code" : contacts_req_response.status_code}

@@ -59,7 +59,10 @@ def add_user():
     # Todo: check if user is already initialized. if yes return 400 bad request
     current_user = CustomerContactCompose.get_info(data['cid'])
     if current_user is not None:
+        print("current_user is not None")
         return Response("User already exists!", status=400, content_type="text/plain")
+
+    print("current_user is ", current_user)
 
     if not is_valid_address(data):
         return Response(json.dumps("Invalid address was provided", default=str),

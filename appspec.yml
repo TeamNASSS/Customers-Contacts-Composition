@@ -3,6 +3,7 @@ os: linux
 files:
   - source: /aws
     destination: /home/ec2-user/app
+    overwrite: true
 hooks:
   AfterInstall:
     - location: install-dependencies.sh
@@ -16,3 +17,5 @@ hooks:
     - location: application-stop.sh
       timeout: 300
       runas: ec2-user
+
+file_exists_behavior: OVERWRITE

@@ -6,15 +6,15 @@ files:
     overwrite: true
 hooks:
   AfterInstall:
-    - location: install-dependencies.sh
+    - location: scripts/install-dependencies.sh
       timeout: 300
       runas: ec2-user
   ApplicationStart:
-    - location: application-start.sh
+    - location: scripts/application-start.sh
       timeout: 300
       runas: ec2-user
   ApplicationStop:
-    - location: application-stop.sh
+    - location: scripts/application-stop.sh
       timeout: 300
       runas: ec2-user
 

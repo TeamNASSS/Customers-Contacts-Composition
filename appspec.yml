@@ -1,20 +1,20 @@
 version: 0.0
 os: linux
 files:
-  - source: /aws
+  - source: /
     destination: /home/ec2-user/app
     overwrite: true
 hooks:
   AfterInstall:
-    - location: scripts/install-dependencies.sh
+    - location: aws/scripts/install-dependencies.sh
       timeout: 300
       runas: ec2-user
   ApplicationStart:
-    - location: scripts/application-start.sh
+    - location: aws/scripts/application-start.sh
       timeout: 300
       runas: ec2-user
   ApplicationStop:
-    - location: scripts/application-stop.sh
+    - location: aws/scripts/application-stop.sh
       timeout: 300
       runas: ec2-user
 

@@ -5,14 +5,14 @@ files:
     destination: /home/ec2-user/app
 hooks:
   AfterInstall:
-   - location: scripts/install-dependencies
-     timeout: 300
-     runas: ec2-user
+    - location: scripts/install-dependencies
+      timeout: 300
+      runas: ec2-user
   ApplicationStart:
-   - location: scripts/application-start
-     timeout: 300
-     runas: ec2-user
+    - location: scripts/application-start
+      timeout: 300
+      runas: ec2-user
   ApplicationStop:
-  - location: scripts/application-stop
-     timeout: 300
-     runas: ec2-user
+    - location: scripts/application-stop
+      timeout: 300
+      runas: ec2-user
